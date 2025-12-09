@@ -1,0 +1,545 @@
+═══════════════════════════════════════════════════════════════════════════════
+ARCHAEOMIND - Communication Templates & Project Config Files
+═══════════════════════════════════════════════════════════════════════════════
+
+VERSION: 1.0.0 (Phase 1 - Production Ready)
+DATE: December 10, 2025
+STATUS: Ready to announce
+
+═══════════════════════════════════════════════════════════════════════════════
+📢 LINKEDIN ANNOUNCEMENT TEMPLATE
+═══════════════════════════════════════════════════════════════════════════════
+
+🎉 Excited to share: ArchaeoMind - An AI Research Assistant for Archaeology!
+
+What is it?
+→ A full-stack web app that uses AI to help archaeologists find and analyze research faster
+→ Upload documents, ask questions in natural language, get AI-powered answers with sources
+→ Powered by Groq LLM, semantic search, and modern tech stack
+
+Key Features:
+✅ Document Upload (auto-chunking)
+✅ Natural Language Queries (RAG - Retrieval Augmented Generation)
+✅ AI-Powered Answers (Groq Llama 3)
+✅ Source Citations (with similarity scores)
+✅ Fast Responses (<3 seconds)
+✅ Zero Cost ($0/month forever!)
+
+Tech Stack:
+→ Backend: FastAPI (Python)
+→ Frontend: Next.js (TypeScript/React)
+→ LLM: Groq (free tier)
+→ Vector DB: ChromaDB (persistent)
+→ Deployment: Vercel + Render (free)
+
+Open Source:
+→ GitHub: github.com/hamsidhi/archaeomind
+→ License: MIT
+→ Contributions welcome!
+
+Status: Phase 1 MVP - Production Ready
+
+Excited to share this with the archaeology research community! 🏛️🤖
+
+#AI #Archaeology #OpenSource #WebDevelopment #RAG #LLM
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📧 EMAIL ANNOUNCEMENT TEMPLATE
+═══════════════════════════════════════════════════════════════════════════════
+
+Subject: ArchaeoMind - AI Research Assistant for Archaeology (Open Source)
+
+Hi [Team/Community],
+
+I'm pleased to announce ArchaeoMind, an AI-powered research assistant designed specifically for archaeology.
+
+What Problem Does It Solve?
+Researchers spend hours searching through documents to find relevant information. ArchaeoMind
+changes that by letting you simply ask questions and get AI-powered answers with sources.
+
+How Does It Work?
+1. Upload archaeology documents (TXT format in Phase 1)
+2. Ask natural language questions
+3. Get answers from Groq Llama 3 with source citations and similarity scores
+4. All in under 3 seconds
+
+Key Features:
+• Document Management - Upload and organize research
+• RAG Query System - Ask questions, get answers with sources
+• Semantic Search - Find relevant documents automatically
+• Production Ready - Deploy to Vercel/Render in 20 minutes
+• Zero Cost - Completely free (using free tiers)
+• Open Source - MIT license, contributions welcome
+
+Tech Stack:
+Backend: FastAPI + Python
+Frontend: Next.js + TypeScript
+LLM: Groq Llama 3 8B (free tier)
+Vector DB: ChromaDB (persistent)
+Deployment: Vercel + Render (free)
+
+Getting Started:
+1. Clone: github.com/hamsidhi/archaeomind
+2. Setup: Follow QUICK_START.md (5 minutes)
+3. Deploy: Follow DEPLOYMENT.md (25 minutes)
+4. Share: Send URL to team
+
+Documentation:
+→ README_UPDATED.md - Complete guide
+→ QUICK_START.md - 5-minute setup
+→ DEPLOYMENT.md - Deploy to production
+→ DEPLOYMENT_CHECKLIST.md - Verification (160+ items)
+
+This is Phase 1 MVP. Phase 2 will include PDF/DOCX parsing, image analysis, and more.
+
+I'd love your feedback and contributions!
+
+Best regards,
+[Your Name]
+
+
+═══════════════════════════════════════════════════════════════════════════════
+.gitignore FILE (CRITICAL - Blocks Secrets!)
+═══════════════════════════════════════════════════════════════════════════════
+
+# Environment variables - NEVER commit these
+.env
+.env.local
+.env*.local
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+.next/
+dist/
+build/
+.tsbuildinfo
+
+# IDE & Editor
+.vscode/
+.idea/
+.sublime-project
+.sublime-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+python.log
+
+# Data & Database
+chroma_data/
+*.db
+*.sqlite3
+uploads/
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.hypothesis/
+
+# Package managers
+package-lock.json
+yarn.lock
+
+
+═══════════════════════════════════════════════════════════════════════════════
+.gitattributes FILE (Optional - Handles Line Endings)
+═══════════════════════════════════════════════════════════════════════════════
+
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Python
+*.py text eol=lf
+*.pyw text eol=crlf
+
+# JavaScript
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+
+# Documentation
+*.md text eol=lf
+*.txt text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.db binary
+
+
+═══════════════════════════════════════════════════════════════════════════════
+.prettierrc FILE (Code Formatting)
+═══════════════════════════════════════════════════════════════════════════════
+
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "endOfLine": "lf"
+}
+
+
+═══════════════════════════════════════════════════════════════════════════════
+pyproject.toml FILE (Python Project Config)
+═══════════════════════════════════════════════════════════════════════════════
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "archaeomind"
+version = "1.0.0"
+description = "AI Research Assistant for Archaeology - RAG System"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "ArchaeoMind Team", email = "contact@archaeomind.ai"}
+]
+keywords = ["archaeology", "ai", "rag", "research", "assistant"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+Homepage = "https://github.com/hamsidhi/archaeomind"
+Documentation = "https://github.com/hamsidhi/archaeomind/tree/main/docs"
+Repository = "https://github.com/hamsidhi/archaeomind.git"
+Issues = "https://github.com/hamsidhi/archaeomind/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_mode = 3
+include_trailing_comma = true
+
+
+═══════════════════════════════════════════════════════════════════════════════
+package.json SCRIPTS (Frontend Scripts)
+═══════════════════════════════════════════════════════════════════════════════
+
+{
+  "name": "archaeomind-frontend",
+  "version": "1.0.0",
+  "description": "ArchaeoMind - AI Research Assistant for Archaeology",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "analyze": "ANALYZE=true next build"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^16.0.0",
+    "postcss": "^8.4.0",
+    "prettier": "^3.0.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.0.0"
+  }
+}
+
+
+═══════════════════════════════════════════════════════════════════════════════
+Makefile (Optional - Common Commands)
+═══════════════════════════════════════════════════════════════════════════════
+
+.PHONY: help install dev build deploy clean test docs
+
+help:
+	@echo "ArchaeoMind - Development Commands"
+	@echo "===================================="
+	@echo "make install     - Install all dependencies"
+	@echo "make dev         - Run locally (backend + frontend)"
+	@echo "make build       - Build for production"
+	@echo "make deploy      - Deploy to production"
+	@echo "make test        - Run tests"
+	@echo "make clean       - Clean build artifacts"
+	@echo "make docs        - Generate documentation"
+
+install:
+	@echo "Installing backend..."
+	cd backend && python -m venv venv && venv\Scripts\activate && pip install -r requirements.txt
+	@echo "Installing frontend..."
+	cd frontend && npm install
+
+dev:
+	@echo "Starting ArchaeoMind locally..."
+	docker-compose up -d
+	@echo "Frontend: http://localhost:3000"
+	@echo "Backend:  http://localhost:8000"
+
+build:
+	@echo "Building for production..."
+	cd frontend && npm run build
+	@echo "Build complete!"
+
+deploy:
+	@echo "Deploying to production..."
+	git add .
+	git commit -m "Deploy: $(shell date +'%Y-%m-%d %H:%M:%S')"
+	git push origin main
+	@echo "Deployment initiated!"
+
+test:
+	@echo "Running tests..."
+	cd frontend && npm test
+	cd ../backend && pytest
+
+clean:
+	@echo "Cleaning build artifacts..."
+	rm -rf frontend/.next
+	rm -rf frontend/node_modules
+	rm -rf backend/__pycache__
+	rm -rf chroma_data
+	@echo "Clean complete!"
+
+docs:
+	@echo "Documentation available in /docs"
+	@echo "Key files:"
+	@echo "  - README_UPDATED.md"
+	@echo "  - QUICK_START.md"
+	@echo "  - DEPLOYMENT.md"
+
+
+═══════════════════════════════════════════════════════════════════════════════
+GITHUB ISSUE TEMPLATES
+═══════════════════════════════════════════════════════════════════════════════
+
+Create .github/ISSUE_TEMPLATE/bug_report.md:
+
+---
+name: Bug Report
+about: Report a bug
+title: "[BUG] "
+labels: bug
+---
+
+## Description
+Clear description of the bug.
+
+## Steps to Reproduce
+1. ...
+2. ...
+3. ...
+
+## Expected Behavior
+What should happen?
+
+## Actual Behavior
+What actually happens?
+
+## Environment
+- OS: Windows/Mac/Linux
+- Python: 3.11+
+- Node: 18+
+- Browser: Chrome/Firefox/etc
+
+## Logs
+```
+Paste relevant logs here
+```
+
+---
+
+Create .github/ISSUE_TEMPLATE/feature_request.md:
+
+---
+name: Feature Request
+about: Suggest an idea
+title: "[FEATURE] "
+labels: enhancement
+---
+
+## Description
+Clear description of the feature.
+
+## Use Case
+Why is this needed?
+
+## Implementation
+How might this be implemented?
+
+## Additional Context
+Any other context?
+
+---
+
+
+═══════════════════════════════════════════════════════════════════════════════
+GITHUB PR TEMPLATE
+═══════════════════════════════════════════════════════════════════════════════
+
+Create .github/PULL_REQUEST_TEMPLATE.md:
+
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation update
+- [ ] Performance improvement
+- [ ] Security improvement
+
+## Related Issue
+Fixes #(issue number)
+
+## Testing
+How was this tested?
+
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Tests pass locally
+- [ ] Documentation updated
+- [ ] No breaking changes
+- [ ] Commits are clear and concise
+
+
+═══════════════════════════════════════════════════════════════════════════════
+CONTRIBUTING.md TEMPLATE
+═══════════════════════════════════════════════════════════════════════════════
+
+# Contributing to ArchaeoMind
+
+Thank you for your interest in contributing!
+
+## How to Contribute
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/xyz`
+3. **Commit** your changes: `git commit -m "Add xyz"`
+4. **Push** to the branch: `git push origin feature/xyz`
+5. **Open** a Pull Request
+
+## Code Standards
+
+- Python: PEP 8 (use Black formatter)
+- JavaScript: ESLint + Prettier
+- Commits: Clear, descriptive messages
+- Tests: Include unit tests for new features
+
+## Reporting Bugs
+
+Use the GitHub Issues template for bug reports.
+
+## Feature Requests
+
+Use the GitHub Issues template for feature requests.
+
+## Questions?
+
+Open an issue with label `question` or email support@archaeomind.ai
+
+
+═══════════════════════════════════════════════════════════════════════════════
+README BADGES
+═══════════════════════════════════════════════════════════════════════════════
+
+Copy these to your main README.md for GitHub visualization:
+
+![Status](https://img.shields.io/badge/status-production-green)
+![Version](https://img.shields.io/badge/version-1.0.0-success)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Python](https://img.shields.io/badge/python-3.11+-blue)
+![Node](https://img.shields.io/badge/node-18+-green)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
+![Code Style](https://img.shields.io/badge/code%20style-black-000000)
+
+Or use shields.io to create custom badges:
+https://shields.io
+
+
+═══════════════════════════════════════════════════════════════════════════════
+END OF COMMUNICATION & CONFIG FILES
+═══════════════════════════════════════════════════════════════════════════════
+
+Status: Ready for announcement ✅
+Version: 1.0.0
+Date: December 10, 2025
+
+Next steps:
+1. Copy these files to your repo
+2. Customize with your details
+3. Announce on LinkedIn/Twitter
+4. Share with archaeology community

@@ -1,0 +1,366 @@
+"""
+================================================================================
+ARCHAEOMIND SAMPLE DATA & PROMPTS
+Dataset for testing and LLM prompt templates
+================================================================================
+"""
+
+# ============================================================================
+# FILE 1: data/indus_valley_excavations.json
+# PURPOSE: Sample excavation notes dataset
+# ============================================================================
+
+{
+  "excavations": [
+    {
+      "id": "exc_001",
+      "site": "Mohenjo-daro",
+      "region": "Sindh Province, Pakistan",
+      "excavation_year": 1922,
+      "lead_archaeologist": "Sir John Marshall",
+      "description": "One of the largest settlements of the Indus Valley Civilization, spanning approximately 300 hectares. The city featured sophisticated urban planning with streets in a grid pattern, public baths, granaries, and planned drainage systems.",
+      "key_findings": [
+        "Great Bath structure",
+        "Indus seals with undeciphered script",
+        "Pottery with distinctive designs",
+        "Weights and measures",
+        "Bronze and stone tools"
+      ],
+      "dating": {
+        "period_start": "2600 BCE",
+        "period_end": "1900 BCE",
+        "confidence": 0.95,
+        "method": "Radiocarbon dating, stratigraphic analysis"
+      },
+      "artifacts_count": 2847,
+      "significance": "Urban center with evidence of sophisticated administration and standardized weights"
+    },
+    {
+      "id": "exc_002",
+      "site": "Harappa",
+      "region": "Punjab, Pakistan",
+      "excavation_year": 1920,
+      "lead_archaeologist": "Daya Ram Sahni",
+      "description": "Major Indus Valley settlement serving as a trade and manufacturing hub. Evidence suggests it was an important port city with connections to Mesopotamian civilizations.",
+      "key_findings": [
+        "Seals and sealings",
+        "Standardized weights",
+        "Evidence of bead-making",
+        "Trade goods from Mesopotamia",
+        "Advanced pottery kilns"
+      ],
+      "dating": {
+        "period_start": "2600 BCE",
+        "period_end": "1900 BCE",
+        "confidence": 0.90,
+        "method": "Stratigraphic analysis, artifact dating"
+      },
+      "artifacts_count": 1523,
+      "significance": "Trade hub with evidence of long-distance commerce"
+    }
+  ],
+  "time_period": {
+    "civilization": "Indus Valley Civilization (Harappan)",
+    "duration": "Approximately 1700 years (2600-1900 BCE)",
+    "geographic_extent": "Over 1 million square kilometers across modern Pakistan and Northwest India",
+    "population_estimate": "Approximately 5 million people",
+    "cultural_characteristics": {
+      "urbanism": "Planned cities with sophisticated drainage",
+      "agriculture": "Wheat, barley, cotton cultivation",
+      "trade": "Extensive trade networks to Mesopotamia and Central Asia",
+      "technology": "Advanced metallurgy, standardized weights",
+      "writing": "Undeciphered script on seals and artifacts"
+    }
+  }
+}
+
+
+# ============================================================================
+# FILE 2: data/artifact_descriptions.txt
+# PURPOSE: Text descriptions of artifacts for RAG
+# ============================================================================
+
+INDUS SEALS AND SEALINGS
+
+The Indus seals represent one of the most distinctive artifacts of the Indus Valley Civilization. 
+These seals are typically square or rectangular, carved from steatite, a soft stone that was readily 
+available in the Kirthar Mountains. Each seal displays a unique design, often featuring an animal motif 
+such as an antelope, rhinoceros, buffalo, or tiger, combined with a short inscription in the Indus script.
+
+The seals served multiple purposes in the ancient economy. Archaeological evidence suggests they were 
+used for marking and authenticating goods in trade. The presence of seal impressions on clay tags found 
+in warehouses indicates their use in administrative functions. Some scholars propose they may have served 
+as status symbols or personal emblems, similar to modern seals or signatures.
+
+Dating: Approximately 2600-1900 BCE
+Material: Primarily steatite; some examples in agate, carnelian, and faience
+Size: Typically 2-3 cm square
+Distribution: Found at major Indus Valley sites
+
+POTTERY AND CERAMICS
+
+The pottery of the Indus Valley Civilization demonstrates remarkable standardization and quality. 
+The most characteristic form is the red pottery with black painted designs. The potters employed the wheel, 
+creating vessels with thin walls and uniform thickness. Designs include geometric patterns, floral motifs, 
+and stylized animal representations.
+
+Common vessel forms include:
+- Storage jars with wide mouths
+- Vessels with restricted openings (likely for liquids)
+- Bowl forms for serving
+- Specialized containers for specific purposes
+
+The standardization of pottery sizes and weights suggests organized production, possibly involving 
+craftsmen's guilds. Petrographic analysis reveals that clay sources varied depending on settlement location, 
+indicating regional ceramic traditions within the broader Indus culture.
+
+WEIGHTS AND MEASURES
+
+Perhaps the most remarkable aspect of Indus Valley material culture is the standardization of weights. 
+Excavations have yielded numerous stone weights, typically in cubic form, following a strict metrological system. 
+The basic unit appears to be approximately 0.86 grams, with weights doubling in regular progression.
+
+This standardization extends to length measurements as well. Bricks found at multiple sites show remarkable 
+consistency in dimensions (approximately 25 x 12.5 x 6.5 cm), and urban layouts reveal standardized street widths 
+and building dimensions. This suggests central authority and quality control in manufacturing and construction.
+
+The evidence for standardized weights and measures indicates:
+- Centralized administration or regulatory system
+- Long-distance trade with standardized accounting
+- Advanced mathematical knowledge
+- Sophisticated economic organization
+
+
+# ============================================================================
+# FILE 3: backend/prompts.py
+# PURPOSE: LLM prompt templates (Extended)
+# ============================================================================
+
+"""
+LLM Prompt Templates for ArchaeoMind
+Each prompt is optimized for specific archaeological tasks
+"""
+
+# RAG System Prompt
+RAG_SYSTEM_PROMPT = """You are Dr. Harappan, an expert archaeologist specializing in the Indus Valley Civilization 
+with 25 years of field and laboratory experience. You have deep knowledge of:
+
+- Indus Valley Civilization (2600-1900 BCE)
+- Archaeological methods and dating techniques
+- Artifact analysis and interpretation
+- Historical context and chronology
+- Comparative civilizations (Egyptian, Mesopotamian)
+
+When answering questions:
+1. Be accurate and evidence-based, citing specific artifacts or sites
+2. Acknowledge uncertainty when appropriate, indicating confidence levels
+3. Provide context about dating methods and chronological uncertainty
+4. Explain archaeological reasoning and methodologies
+5. Draw appropriate comparisons to other ancient civilizations
+
+Always maintain academic rigor while being accessible to educated non-specialists."""
+
+# RAG Query Template
+RAG_QUERY_TEMPLATE = """Context from archaeological documents:
+
+{context}
+
+Question: {question}
+
+Based on the provided archaeological evidence, please answer the question. Include:
+- Direct answer to the question
+- Supporting evidence from the context
+- Any chronological or dating information
+- Comparative context if relevant
+- Caveats or uncertainties
+
+Answer:"""
+
+# Artifact Analysis Prompt
+ARTIFACT_ANALYSIS_PROMPT = """You are analyzing an artifact from the Indus Valley Civilization. Based on the image analysis 
+and available metadata, provide:
+
+1. **Artifact Classification**
+   - Type (seal, pottery, tool, weight, etc.)
+   - Function/Purpose
+   - Diagnostic features
+
+2. **Material Analysis**
+   - Primary material
+   - Secondary materials (if applicable)
+   - Evidence of manufacturing technique
+
+3. **Dating Assessment**
+   - Estimated date range
+   - Confidence level (low/medium/high)
+   - Dating methodology (artifact type, context, etc.)
+
+4. **Cultural Significance**
+   - Role in society
+   - Evidence of trade/craft specialization
+   - Comparison to similar artifacts
+
+5. **Archaeological Context**
+   - Common at which sites?
+   - Evidence of mass production or craft
+   - Implications for understanding the civilization
+
+Provide structured, detailed analysis suitable for a museum exhibit or research paper."""
+
+# Timeline Extraction Prompt
+TIMELINE_EXTRACTION_PROMPT = """Extract chronological information from the provided text to create a timeline. 
+
+For each event, determine:
+1. **Date/Period**: Specific date or date range (if available)
+2. **Event Description**: Clear, concise description of what occurred
+3. **Evidence**: What archaeological evidence supports this dating
+4. **Confidence**: 0.0-1.0 confidence score (1.0 = very certain)
+5. **Source**: Which documents/sites provide this information
+
+Return as a JSON array with the following structure:
+{{
+  "timeline": [
+    {{
+      "date": "2600 BCE",
+      "event": "Emergence of urban centers in Indus Valley",
+      "evidence": "Early city plans at Mohenjo-daro and Harappa",
+      "confidence": 0.85,
+      "source": "Marshall excavations"
+    }}
+  ]
+}}
+
+Organize from earliest to latest date. Focus on major transitions and significant events."""
+
+# Similarity Analysis Prompt
+SIMILARITY_ANALYSIS_PROMPT = """Compare this artifact with similar artifacts found in the archaeological record.
+
+For the query artifact:
+1. Identify type and distinctive features
+2. Find similar artifacts in the database
+3. For each similar artifact, explain:
+   - Similarities in form, material, or decoration
+   - Differences in detail or size
+   - Geographic or temporal variations
+   - Manufacturing technique parallels
+
+4. Provide insights on:
+   - Whether this represents a common artifact type
+   - Geographic distribution patterns
+   - Chronological evolution of the type
+   - Evidence of specialized production
+
+This analysis helps understand craft traditions and trade networks."""
+
+# Research Summary Prompt
+RESEARCH_SUMMARY_PROMPT = """Based on the archaeological evidence provided, create a comprehensive research summary.
+
+Structure:
+1. **Overview**: What civilization, time period, site?
+2. **Key Evidence**: Most important artifacts or features
+3. **Interpretations**: What does evidence tell us about society?
+4. **Open Questions**: What remains uncertain or unknown?
+5. **Connections**: How does this relate to broader context?
+
+Keep language accessible but academically rigorous. Cite specific evidence and acknowledge alternative interpretations."""
+
+# ============================================================================
+# FILE 4: data/learing_config.json
+# PURPOSE: Configuration for retrieval and generation
+# ============================================================================
+
+{
+  "retrieval_config": {
+    "top_k": 5,
+    "similarity_threshold": 0.6,
+    "chunk_context_window": 512,
+    "max_retrieved_tokens": 2000
+  },
+  "generation_config": {
+    "model": "llama-3.1-8b-instant",
+    "temperature": 0.7,
+    "max_tokens": 1024,
+    "top_p": 0.9,
+    "frequency_penalty": 0.0,
+    "presence_penalty": 0.0
+  },
+  "prompting_strategy": {
+    "system_prompt": "You are Dr. Harappan, an expert archaeologist...",
+    "context_injection": "Use the following archaeological evidence to answer:",
+    "citation_format": "[Source: Document Name, Site: Location, Date: XXXX BCE]",
+    "uncertainty_handling": "If uncertain, clearly state confidence level and alternative interpretations"
+  },
+  "embedding_config": {
+    "model": "all-MiniLM-L6-v2",
+    "dimension": 384,
+    "pooling": "mean_pooling",
+    "normalize": true
+  },
+  "chunking_strategy": {
+    "strategy": "semantic",
+    "chunk_size": 512,
+    "overlap": 50,
+    "separator": [".", "\\n\\n", "\\n"],
+    "preserve_metadata": true
+  }
+}
+
+# ============================================================================
+# FILE 5: data/sample_queries.json
+# PURPOSE: Example queries for testing
+# ============================================================================
+
+{
+  "test_queries": [
+    {
+      "id": "q1",
+      "query": "What were Indus seals used for?",
+      "category": "artifact_function",
+      "expected_topics": ["trade", "administration", "authentication"]
+    },
+    {
+      "id": "q2",
+      "query": "How did archaeologists date the Indus Valley Civilization?",
+      "category": "methodology",
+      "expected_topics": ["radiocarbon dating", "stratigraphy", "chronology"]
+    },
+    {
+      "id": "q3",
+      "query": "What evidence indicates sophisticated urban planning at Mohenjo-daro?",
+      "category": "urban_development",
+      "expected_topics": ["grid pattern streets", "drainage", "public buildings"]
+    },
+    {
+      "id": "q4",
+      "query": "Describe the standardization system in Indus Valley weights and measures",
+      "category": "economy",
+      "expected_topics": ["standardization", "trade", "administration"]
+    },
+    {
+      "id": "q5",
+      "query": "What animals appear on Indus seals and why?",
+      "category": "symbolism",
+      "expected_topics": ["animal motifs", "symbolism", "religious significance"]
+    }
+  ],
+  "artifact_analysis_samples": [
+    {
+      "artifact": "Square seal with buffalo motif",
+      "questions": [
+        "How can we determine the age of this seal?",
+        "What does the buffalo symbol indicate about trade or culture?",
+        "How common is this design?",
+        "What manufacturing techniques were used?"
+      ]
+    },
+    {
+      "artifact": "Red pottery with black painted geometric design",
+      "questions": [
+        "Is this characteristic of a specific time period?",
+        "What was the likely function of this vessel?",
+        "How does this pottery compare across different Indus sites?",
+        "What does the decoration style tell us?"
+      ]
+    }
+  ]
+}

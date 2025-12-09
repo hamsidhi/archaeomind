@@ -1,0 +1,464 @@
+═══════════════════════════════════════════════════════════════════════════════
+ARCHAEOMIND - Environment & Deployment Configuration (Phase 1)
+═══════════════════════════════════════════════════════════════════════════════
+
+VERSION: 1.0.0
+STATUS: Production Ready
+DATE: December 10, 2025
+
+═══════════════════════════════════════════════════════════════════════════════
+📋 ENVIRONMENT VARIABLES
+═══════════════════════════════════════════════════════════════════════════════
+
+BACKEND (.env file)
+───────────────────────────────────────────────────────────────────────────────
+
+GROQ_API_KEY=gsk_your_actual_key_here
+CHUNK_SIZE=512
+CHUNK_OVERLAP=50
+LLM_MODEL=llama-3.1-8b-instant
+LLM_TEMPERATURE=0.7
+CORS_ORIGINS=*
+
+Note: Get GROQ_API_KEY from console.groq.com (free tier)
+
+
+FRONTEND (.env.local file)
+───────────────────────────────────────────────────────────────────────────────
+
+NEXTPUBLIC_API_URL=http://localhost:8000
+
+(For production: NEXTPUBLIC_API_URL=https://your-render-backend.onrender.com)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🐳 DOCKER COMPOSE (docker-compose.yml)
+═══════════════════════════════════════════════════════════════════════════════
+
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    volumes:
+      - ./chroma_data:/app/chroma_data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXTPUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+
+volumes:
+  chroma_data:
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🐳 DOCKERFILE - BACKEND (backend/Dockerfile)
+═══════════════════════════════════════════════════════════════════════════════
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app
+COPY . .
+
+# Create directory for ChromaDB data
+RUN mkdir -p chroma_data
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=10s --timeout=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🐳 DOCKERFILE - FRONTEND (frontend/Dockerfile)
+═══════════════════════════════════════════════════════════════════════════════
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json .
+
+# Install dependencies
+RUN npm ci
+
+# Copy app
+COPY . .
+
+# Build
+RUN npm run build
+
+# Expose port
+EXPOSE 3000
+
+# Start app
+CMD ["npm", "start"]
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📝 .gitignore FILE
+═══════════════════════════════════════════════════════════════════════════════
+
+# Environment variables
+.env
+.env.local
+.env*.local
+.env.example
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Build
+.next/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+python.log
+
+# Data
+chroma_data/
+*.db
+uploads/
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📦 requirements.txt (Backend)
+═══════════════════════════════════════════════════════════════════════════════
+
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+groq==0.4.1
+sentence-transformers==2.2.2
+chromadb==0.4.24
+python-dotenv==1.0.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+cors==1.0.1
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📦 package.json (Frontend)
+═══════════════════════════════════════════════════════════════════════════════
+
+{
+  "name": "archaeomind-frontend",
+  "version": "1.0.0",
+  "description": "ArchaeoMind - AI Archaeology Research Assistant",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^16.0.0"
+  }
+}
+
+
+═══════════════════════════════════════════════════════════════════════════════
+⚙️ RENDER BACKEND DEPLOYMENT ENVIRONMENT
+═══════════════════════════════════════════════════════════════════════════════
+
+Variable Name:              Value:
+──────────────────────────────────────────────────────────────────────────────
+GROQ_API_KEY               gsk_your_actual_key_from_groq_console
+CHUNK_SIZE                 512
+CHUNK_OVERLAP              50
+LLM_MODEL                  llama-3.1-8b-instant
+CORS_ORIGINS               https://archaeomind.vercel.app
+
+Note: Get GROQ_API_KEY from https://console.groq.com/keys
+Update CORS_ORIGINS with your actual Vercel URL after deployment
+
+
+═══════════════════════════════════════════════════════════════════════════════
+⚙️ VERCEL FRONTEND DEPLOYMENT ENVIRONMENT
+═══════════════════════════════════════════════════════════════════════════════
+
+Variable Name:              Value:
+──────────────────────────────────────────────────────────────────────────────
+NEXTPUBLIC_API_URL         https://archaeomind-backend.onrender.com
+
+Update with your actual Render backend URL after deployment
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🚀 QUICK START COMMANDS
+═══════════════════════════════════════════════════════════════════════════════
+
+LOCAL SETUP (5 minutes)
+───────────────────────────────────────────────────────────────────────────────
+
+# Terminal 1 - Backend
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+echo GROQ_API_KEY=your_key > .env
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+# Terminal 2 - Frontend
+cd frontend
+npm install
+echo NEXTPUBLIC_API_URL=http://localhost:8000 > .env.local
+npm run dev
+
+# Browser
+http://localhost:3000
+
+
+DOCKER SETUP (2 minutes)
+───────────────────────────────────────────────────────────────────────────────
+
+# Copy environment file
+cp backend/.env.example backend/.env
+# Edit backend/.env with your GROQ_API_KEY
+
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Browser
+http://localhost:3000
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🌍 DEPLOYMENT SERVERS SETUP
+═══════════════════════════════════════════════════════════════════════════════
+
+VERCEL (Frontend)
+───────────────────────────────────────────────────────────────────────────────
+
+1. Go to vercel.com
+2. Click "New Project"
+3. Import GitHub repository
+4. Select `frontend` directory
+5. Add environment variable:
+   NEXTPUBLIC_API_URL=https://your-render-url.onrender.com
+6. Deploy
+7. Get URL: https://archaeomind.vercel.app (example)
+
+
+RENDER (Backend)
+───────────────────────────────────────────────────────────────────────────────
+
+1. Go to render.com
+2. Click "New +" → "Web Service"
+3. Connect GitHub repository
+4. Select `backend` directory
+5. Environment: Python 3.11
+6. Build command: pip install -r requirements.txt
+7. Start command: uvicorn main:app --host 0.0.0.0
+8. Add environment variables:
+   - GROQ_API_KEY=gsk_your_key
+   - CORS_ORIGINS=https://your-vercel-url.vercel.app
+9. Deploy
+10. Get URL: https://archaeomind-backend.onrender.com (example)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔗 LINKING SERVICES (After Deployment)
+═══════════════════════════════════════════════════════════════════════════════
+
+Step 1: Update Vercel
+───────────────────────────────────────────────────────────────────────────────
+- Go to Vercel project settings
+- Update NEXTPUBLIC_API_URL to Render URL
+- Redeploy
+
+
+Step 2: Update Render
+───────────────────────────────────────────────────────────────────────────────
+- Go to Render project settings
+- Update CORS_ORIGINS to Vercel URL
+- Redeploy
+
+
+Step 3: Test
+───────────────────────────────────────────────────────────────────────────────
+- Visit your Vercel URL
+- Upload a document
+- Ask a question
+- Verify answer appears
+
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ VERIFICATION CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+Before Deployment:
+- [ ] GROQ_API_KEY obtained from console.groq.com
+- [ ] Backend runs locally: uvicorn main:app
+- [ ] Frontend runs locally: npm run dev
+- [ ] Upload works in browser
+- [ ] Query returns answer + sources
+- [ ] No console errors
+- [ ] .env files not in git (check .gitignore)
+
+GitHub Push:
+- [ ] Git configured (git config --global...)
+- [ ] Repository created on GitHub
+- [ ] .gitignore includes .env files
+- [ ] All code committed
+- [ ] Pushed to GitHub successfully
+
+Vercel Deployment:
+- [ ] Account created at vercel.com
+- [ ] Repository connected
+- [ ] frontend directory selected
+- [ ] Environment variable added
+- [ ] Deployment successful
+- [ ] Frontend loads at URL
+
+Render Deployment:
+- [ ] Account created at render.com
+- [ ] Repository connected
+- [ ] backend directory selected
+- [ ] Environment variables added
+- [ ] Deployment successful
+- [ ] Backend responds at /health
+
+Production Linking:
+- [ ] Vercel URL updated in Render CORS_ORIGINS
+- [ ] Render URL updated in Vercel NEXTPUBLIC_API_URL
+- [ ] Both services redeployed
+- [ ] End-to-end test successful
+- [ ] Upload + query works from production URL
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📞 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+Port 8000 Already in Use
+$ lsof -i :8000
+$ kill -9 <PID>
+(or use different port: uvicorn main:app --port 8001)
+
+Groq API Rate Limit
+Free tier: 5,000 tokens/minute
+Solution: Use smaller chunks or wait
+
+CORS Errors
+Update CORS_ORIGINS in Render environment
+Include your Vercel URL with https://
+
+ChromaDB Connection Error
+rm -rf chroma_data/
+(restart the application)
+
+venv Not Activating
+# Windows PowerShell might need:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Then: venv\Scripts\Activate.ps1
+
+npm install Fails
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔐 SECURITY CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+- [ ] No API keys in source code
+- [ ] .env files in .gitignore
+- [ ] Environment variables used for secrets
+- [ ] CORS properly configured
+- [ ] Input validation on all endpoints
+- [ ] Error messages don't leak data
+- [ ] HTTPS enabled (Vercel/Render automatic)
+- [ ] No console.log() with sensitive data
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📚 ADDITIONAL RESOURCES
+═══════════════════════════════════════════════════════════════════════════════
+
+FastAPI:        https://fastapi.tiangolo.com
+Next.js:        https://nextjs.org/docs
+Groq API:       https://console.groq.com/docs
+ChromaDB:       https://docs.trychroma.com
+Vercel Docs:    https://vercel.com/docs
+Render Docs:    https://render.com/docs
+GitHub:         https://docs.github.com
+
+
+═══════════════════════════════════════════════════════════════════════════════
+END OF ENVIRONMENT & DEPLOYMENT CONFIGURATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Status: Ready to Deploy ✅
+Version: 1.0.0
+Date: December 10, 2025
