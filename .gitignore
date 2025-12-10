@@ -1,19 +1,19 @@
-﻿# Environment variables - NEVER commit these
+﻿# 🛡️ SECRETS (NEVER commit!)
 .env
-.env.local
-.env*.local
+*.env
 
-# Dependencies
-node_modules/
-venv/
+# PYTHON
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
 
-# Build artifacts
-.next/
-dist/
-build/
+# NODE
+node_modules/
+npm-debug.log
 
-# Data
-chroma_data/
-uploads/
+# DATA
+chromadata/
