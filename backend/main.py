@@ -1,7 +1,7 @@
 ﻿import os
 from dotenv import load_dotenv
 load_dotenv()
-os.environ['GROQ_API_KEY'] = "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"  
+os.environ['GROQ_API_KEY'] = "your api key here"  
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
