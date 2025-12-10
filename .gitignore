@@ -1,19 +1,11 @@
-﻿# 🛡️ SECRETS (NEVER commit!)
+﻿# SECRETS
 .env
 *.env
 
 # PYTHON
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
 venv/
-env/
+chromadata/
 
 # NODE
 node_modules/
-npm-debug.log
-
-# DATA
-chromadata/
