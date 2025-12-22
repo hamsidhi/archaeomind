@@ -1,4 +1,4 @@
-# ArchaeoMind: AI Research Assistant for Archaeology (an imcomplete project)
+# ArchaeoMind: AI Research Assistant for Archaeology (An Incomplete Project)
 
 ![Status](https://img.shields.io/badge/status-production-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
